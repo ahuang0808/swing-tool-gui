@@ -10,6 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libmtdev-dev \
+          libgl1-mesa-dev \
+          libgles2-mesa-dev \
+          python3-pil \
+          libjpeg-dev \
+          zlib1g-dev \
+          libfreetype6-dev \
+          liblcms2-dev \
+          libopenjp2-7 \
+          libtiff5 \
+          libwebp-dev \
+          libharfbuzz-dev \
+          libfribidi-dev \
+          libxcb1-dev \
+          libxkbcommon-dev \
+          libmtdev-dev
+
     - name: Checkout code
       uses: actions/checkout@v3
 
