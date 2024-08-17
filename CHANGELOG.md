@@ -1,4 +1,9 @@
 
+## [v0.1.2] - 2024-08-17
+### :bug: Bug Fixes
+- [`a59d7b1`](https://github.com/ahuang0808/swing-tool-gui/commit/a59d7b1b7fe4674a4c4236504503c5a4363dbe6a) - fix typo in the built assets name *(commit by [@ahuang0808](https://github.com/ahuang0808))*
+
+
 ## [v0.1.1] - 2024-08-17
 ### :sparkles: New Features
 - [`2342c0b`](https://github.com/ahuang0808/swing-tool-gui/commit/2342c0b7bd856a5778d0cd90a1f12060586af767) - support chinese font *(commit by [@ahuang0808](https://github.com/ahuang0808))*
@@ -11,3 +16,4 @@
 - [`ea34db1`](https://github.com/ahuang0808/swing-tool-gui/commit/ea34db183821b93e9d986b59c3889c4b0137f0b3) - big refactor *(commit by [@ahuang0808](https://github.com/ahuang0808))*
 
 [v0.1.1]: https://github.com/ahuang0808/swing-tool-gui/compare/v0.1.0...v0.1.1
+[v0.1.2]: https://github.com/ahuang0808/swing-tool-gui/compare/v0.1.1...v0.1.2
