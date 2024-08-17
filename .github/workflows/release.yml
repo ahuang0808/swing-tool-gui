@@ -67,6 +67,6 @@ jobs:
       with:
         body_path: CHANGELOG.md
         files: |
-          dist/*
+          dist/swin_tool_gui.app
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
