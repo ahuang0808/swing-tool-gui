@@ -40,8 +40,9 @@ class ImageImportScreen(Screen):
         """
         if self.collide_point(*touch.pos):
             command = """osascript -e 'set theFiles to choose file with prompt "Select files or folder:" of type {"public.folder", "public.item"} with multiple selections allowed'"""  # noqa: E501
-            process = subprocess.Popen(  # noqa: S603
+            process = subprocess.Popen(  # noqa: S602
                 command,
+                shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
@@ -206,8 +207,9 @@ class ImageProcessScreen(Screen):
         command = """
         osascript -e 'set theFolder to choose folder with prompt "Select Save Directory"' -e 'POSIX path of theFolder'
         """  # noqa: E501
-        process = subprocess.Popen(  # noqa: S603
+        process = subprocess.Popen(  # noqa: S602
             command,
+            shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
