@@ -774,7 +774,7 @@ test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "importlib-metadata
 
 [[package]]
 name = "swing-tool"
-version = "1.0.0"
+version = "1.0.3"
 description = "Tools for Swing."
 optional = false
 python-versions = "~3.12"
@@ -788,8 +788,8 @@ pillow = "^10.4.0"
 [package.source]
 type = "git"
 url = "https://github.com/ahuang0808/swing-tool.git"
-reference = "v1.0.0"
-resolved_reference = "2a4a1c3e74dbc2a008b1d2a85156d85414756c1f"
+reference = "v1.0.3"
+resolved_reference = "4c54399c43433f13026204ef00a6cc388533c418"
 
 [[package]]
 name = "urllib3"
@@ -831,4 +831,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.12"
-content-hash = "dbaf67e0f2be96692ead1e1a6b03dc0913663936c731080ccf22f2faec516be6"
+content-hash = "af94f2894b547036e50e117dcf4b9cc01517c772b843b94a9c91f3e0217291d0"

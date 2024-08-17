@@ -31,9 +31,7 @@ TODO
 - Find everything in [Github releases](https://github.com/ahuang0808/swing-tool-gui/releases/)
 
 ## TODO
-- Disable start button when output dir not set
 - Update docstring
 - Add clear error output
 - standarize code
-- Remove duplicated static folder with swing_tool
 - Fix all the temp noqa

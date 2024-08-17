@@ -1,5 +1,6 @@
 POETRY_RUN := poetry run
 VERSION := $(shell poetry version -s)
+export PYTHONPATH := $(shell pwd)
 
 .DEFAULT_GOAL := help
 
@@ -8,6 +9,11 @@ help:  ## print this help
 	@grep -E '^[a-zA-Z_/-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 .PHONY: help
+
+run:    ## Run the app
+
+	$(POETRY_RUN) python swing_tool_gui/app.py
+.PHONY: format
 
 lint:    ## Check lint
 	$(POETRY_RUN) ruff check
@@ -18,7 +24,7 @@ format:    ## Fix lint
 .PHONY: format
 
 build:    ## Build the app
-	$(POETRY_RUN) pyinstaller --name swing_tool_gui --windowed --onefile src/app.py
+	$(POETRY_RUN) pyinstaller --name swing_tool_gui --windowed swing_tool_gui/app.py --noconfirm --collect-all=swing_tool
 .PHONY: build
 
 release:    ## Create new tag
