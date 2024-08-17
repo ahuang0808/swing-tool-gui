@@ -31,3 +31,25 @@ def apple_alias_to_posix_path(alias_path):
     str: POSIX path to the file
     """
     return alias_path.decode("utf-8").replace(":", "/").lstrip("alias Macintosh HD")  # noqa: B005
+
+
+def find_system_font():
+    """
+    Find system default Chinese font
+
+    Args:
+    Nonhe
+
+    Return:
+    str: Path to font file
+    """
+    import platform
+
+    system = platform.system()
+    if system == "Windows":
+        return "C:\\Windows\\Fonts\\msyh.ttc"
+    if system == "Darwin":
+        return "/System/Library/Fonts/STHeiti Light.ttc"
+    if system == "Linux":
+        return "/usr/share/fonts/truetype/arphic/ukai.ttc"
+    return None
