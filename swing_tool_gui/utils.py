@@ -53,3 +53,34 @@ def find_system_font():
     if system == "Linux":
         return "/usr/share/fonts/truetype/arphic/ukai.ttc"
     return None
+
+
+def get_image_display_area(image_widget):
+    """
+    Get image display area.
+
+    Args:
+    image_widget
+
+    Return:
+    tuple: (x, y, width, height)
+    """
+    # 获取图片纹理的宽高
+    texture_width, texture_height = image_widget.texture_size
+    # 获取 Image 小部件的宽高
+    widget_width, widget_height = image_widget.size
+
+    # 计算图片在 Image 小部件中的缩放比例
+    scale_x = widget_width / texture_width
+    scale_y = widget_height / texture_height
+    scale = min(scale_x, scale_y)
+
+    # 计算图片显示的宽高
+    display_width = texture_width * scale
+    display_height = texture_height * scale
+
+    # 计算图片实际显示区域的 x 和 y
+    display_x = image_widget.center_x - display_width / 2
+    display_y = image_widget.center_y - display_height / 2
+
+    return display_x, display_y, display_width, display_height

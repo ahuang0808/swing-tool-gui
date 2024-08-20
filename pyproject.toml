@@ -10,6 +10,7 @@ package-mode = false
 python = "~3.12"
 Kivy = "^2.3.0"
 swing-tool = {git = "https://github.com/ahuang0808/swing-tool.git", rev = "v1.1.0"}
+olefile = "^0.47"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"
