@@ -52,20 +52,25 @@ class ImageImportScreen(Screen):
             if process.returncode != 0:
                 pass
 
-            posix_paths = [
-                apple_alias_to_posix_path(alias_path)
-                for alias_path in output.strip().split(b", ")
-            ]
-            # If select folder, get all image path under it.
-            if len(posix_paths) == 1 and Path(posix_paths[0]).is_dir():
-                posix_paths = list(Path(posix_paths[0]).rglob("*"))
+            if output:
+                posix_paths = [
+                    apple_alias_to_posix_path(alias_path)
+                    for alias_path in output.strip().split(b", ")
+                ]
+                # If select folder, get all image path under it.
+                if len(posix_paths) == 1 and Path(posix_paths[0]).is_dir():
+                    posix_paths = list(Path(posix_paths[0]).rglob("*"))
 
-            # Filter out non-image files
-            image_paths = [
-                image_path for image_path in posix_paths if is_image_file(image_path)
-            ]
-            self.manager.get_screen("image_process_screen").set_input_files(image_paths)
-            self.manager.current = "image_process_screen"
+                # Filter out non-image files
+                image_paths = [
+                    image_path
+                    for image_path in posix_paths
+                    if is_image_file(image_path)
+                ]
+                self.manager.get_screen("image_process_screen").set_input_files(
+                    image_paths,
+                )
+                self.manager.current = "image_process_screen"
 
 
 class ImageProcessScreen(Screen):
@@ -154,6 +159,30 @@ class ImageProcessScreen(Screen):
 
         return output_dir_layout
 
+    def _build_image_row(self, file):
+        file_row = BoxLayout(
+            size_hint_y=None,
+            height="342dp",
+        )  # change the height to resize the image
+
+        img = Image(
+            source=file,
+            size_hint_x=0.5,
+            allow_stretch=True,
+            keep_ratio=True,
+        )
+        filename = os.path.splitext(os.path.basename(file))[0]  # noqa: PTH122, PTH119
+        text_input = TextInput(
+            text=filename,
+            multiline=False,
+            size_hint_x=0.5,
+        )  # 文本框占一半宽度
+
+        file_row.add_widget(img)
+        file_row.add_widget(text_input)
+
+        return file_row
+
     def _build_image_rows(self):
         # Files 字符串和下面的文件行
         image_rows_layout = BoxLayout(orientation="vertical", padding=(48, 0, 0, 0))
@@ -172,26 +201,7 @@ class ImageProcessScreen(Screen):
         files_grid_layout.bind(minimum_height=files_grid_layout.setter("height"))
 
         for file in self.input_files:
-            file_row = BoxLayout(
-                size_hint_y=None,
-                height="342dp",
-            )  # change the height to resize the image
-
-            img = Image(
-                source=file,
-                size_hint_x=0.5,
-                allow_stretch=True,
-                keep_ratio=True,
-            )
-            filename = os.path.splitext(os.path.basename(file))[0]  # noqa: PTH122, PTH119
-            text_input = TextInput(
-                text=filename,
-                multiline=False,
-                size_hint_x=0.5,
-            )  # 文本框占一半宽度
-
-            file_row.add_widget(img)
-            file_row.add_widget(text_input)
+            file_row = self._build_image_row(file)
             files_grid_layout.add_widget(file_row)
             self.file_rows.append(file_row)
 
