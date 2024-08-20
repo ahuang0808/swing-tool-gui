@@ -51,7 +51,7 @@ jobs:
     - name: Create Release and Upload Assets
       uses: softprops/action-gh-release@v2.0.8
       with:
-        body_path: CHANGELOG.md
+        body: ${{ steps.changelog.outputs.changes }}
         files: |
           dist/swing_tool_gui.zip
       env:
