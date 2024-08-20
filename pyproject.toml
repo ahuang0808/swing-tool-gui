@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "swing-tool-gui"
-version = "0.1.3"
+version = "1.0.0"
 description = ""
 authors = ["Aiden Huang <ahuang9688@gmail.com>"]
 readme = "README.md"
@@ -9,7 +9,7 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "~3.12"
 Kivy = "^2.3.0"
-swing-tool = {git = "https://github.com/ahuang0808/swing-tool.git", rev = "v1.0.3"}
+swing-tool = {git = "https://github.com/ahuang0808/swing-tool.git", rev = "v1.1.0"}
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"
