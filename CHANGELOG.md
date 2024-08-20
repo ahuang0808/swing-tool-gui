@@ -1,4 +1,12 @@
 
+## [v1.0.0] - 2024-08-20
+### :sparkles: New Features
+- [`50d796a`](https://github.com/ahuang0808/swing-tool-gui/commit/50d796ac4e416615be0c2021cce9e867fb9ab9fc) - add crop box *(commit by [@ahuang0808](https://github.com/ahuang0808))*
+
+### :bug: Bug Fixes
+- [`b12e726`](https://github.com/ahuang0808/swing-tool-gui/commit/b12e726070783ffa2b3cbbd16a0781d95b403b9e) - stay at the image import screen if no files selected *(commit by [@ahuang0808](https://github.com/ahuang0808))*
+
+
 ## [v0.1.2] - 2024-08-17
 ### :bug: Bug Fixes
 - [`a59d7b1`](https://github.com/ahuang0808/swing-tool-gui/commit/a59d7b1b7fe4674a4c4236504503c5a4363dbe6a) - fix typo in the built assets name *(commit by [@ahuang0808](https://github.com/ahuang0808))*
@@ -17,3 +25,4 @@
 
 [v0.1.1]: https://github.com/ahuang0808/swing-tool-gui/compare/v0.1.0...v0.1.1
 [v0.1.2]: https://github.com/ahuang0808/swing-tool-gui/compare/v0.1.1...v0.1.2
+[v1.0.0]: https://github.com/ahuang0808/swing-tool-gui/compare/v0.1.3...v1.0.0
