@@ -10,24 +10,34 @@ help:  ## print this help
 	@echo ""
 .PHONY: help
 
-run:    ## Run the app
+init:    ## Init the dev env
+	poetry install
+	poetry shell
+	pre-commit install
+	pre-commit install --hook-type commit-msg
+.PHONY: init
 
+run:    ## Run the app
 	$(POETRY_RUN) python swing_tool_gui/app.py
 .PHONY: format
 
 lint:    ## Check lint
-	$(POETRY_RUN) ruff check
+	$(POETRY_RUN) black . --diff
+	$(POETRY_RUN) isort . --check --diff || true
+	$(POETRY_RUN) flake8
 .PHONY: lint
 
 format:    ## Fix lint
-	$(POETRY_RUN) ruff format
+	$(POETRY_RUN) black .
+	$(POETRY_RUN) isort .
+	$(POETRY_RUN) flake8
 .PHONY: format
 
 build:    ## Build the app
 	$(POETRY_RUN) pyinstaller --name swing_tool_gui --windowed swing_tool_gui/app.py --noconfirm --strip --clean --collect-all=swing_tool
 .PHONY: build
 
-release:    ## Create new tag
+release:    ## Create new tag with version in pyproject.toml
 	git tag v${VERSION}
 	git push origin v${VERSION}
 .PHONY: release
