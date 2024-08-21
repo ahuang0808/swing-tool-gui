@@ -28,7 +28,4 @@ TODO
 - Find everything in [Github releases](https://github.com/ahuang0808/swing-tool-gui/releases/)
 
 ## TODO
-- Update docstring
 - Add clear error output
-- standarize code
-- Fix all the temp noqa

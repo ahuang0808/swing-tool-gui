@@ -1,3 +1,4 @@
+from kivy.uix.widget import Widget
 from PIL import Image
 
 
@@ -20,17 +21,17 @@ def is_image_file(file_path: str):
         return True
 
 
-def apple_alias_to_posix_path(alias_path):
+def apple_alias_to_posix_path(alias_path: bytes):
     """
     Convert apple alias path to POSIX path
 
     Args:
-    alias_path: Path to the file
+    alias_path(bytes): Apple alias Path to the file
 
     Return:
     str: POSIX path to the file
     """
-    return alias_path.decode("utf-8").replace(":", "/").lstrip("alias Macintosh HD")  # noqa: B005
+    return alias_path.decode("utf-8").replace(":", "/").lstrip("alias Macintosh HD")
 
 
 def find_system_font():
@@ -38,7 +39,7 @@ def find_system_font():
     Find system default Chinese font
 
     Args:
-    Nonhe
+    None
 
     Return:
     str: Path to font file
@@ -55,31 +56,31 @@ def find_system_font():
     return None
 
 
-def get_image_display_area(image_widget):
+def get_image_display_area(image_widget: Widget):
     """
     Get image display area.
 
     Args:
-    image_widget
+    image_widget(Widget): Widget of image.
 
     Return:
     tuple: (x, y, width, height)
     """
-    # 获取图片纹理的宽高
+    # get size of image texture
     texture_width, texture_height = image_widget.texture_size
-    # 获取 Image 小部件的宽高
+    # get size of image widget
     widget_width, widget_height = image_widget.size
 
-    # 计算图片在 Image 小部件中的缩放比例
+    # alculate the scale of image in widget
     scale_x = widget_width / texture_width
     scale_y = widget_height / texture_height
     scale = min(scale_x, scale_y)
 
-    # 计算图片显示的宽高
+    # calculate display image size
     display_width = texture_width * scale
     display_height = texture_height * scale
 
-    # 计算图片实际显示区域的 x 和 y
+    # calculate the display position
     display_x = image_widget.center_x - display_width / 2
     display_y = image_widget.center_y - display_height / 2
 

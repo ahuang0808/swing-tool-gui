@@ -35,6 +35,7 @@ repos:
     rev: 7.1.1
     hooks:
       - id: flake8
+        additional_dependencies: [Flake8-pyproject]
 
   # Commit message linter
   - repo: https://github.com/compilerla/conventional-pre-commit

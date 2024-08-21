@@ -5,8 +5,7 @@ from pathlib import Path
 
 from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
-from kivy.graphics import Color
-from kivy.graphics import Line
+from kivy.graphics import Color, Line
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
@@ -21,14 +20,16 @@ from kivy.uix.widget import Widget
 from PIL import Image as PILImage
 from swing_tool.modules.image import SwingImageBuilder
 
-from swing_tool_gui.utils import apple_alias_to_posix_path
-from swing_tool_gui.utils import get_image_display_area
-from swing_tool_gui.utils import is_image_file
+from swing_tool_gui.utils import (
+    apple_alias_to_posix_path,
+    get_image_display_area,
+    is_image_file,
+)
 
 
 class ImageImportScreen(Screen):
     """
-    Class for inputing image files.
+    Class for inputting image files.
     """
 
     def __init__(self, **kwargs):
@@ -49,8 +50,12 @@ class ImageImportScreen(Screen):
         What happens when clicking the window.
         """
         if self.collide_point(*touch.pos):
-            command = """osascript -e 'set theFiles to choose file with prompt "Select files or folder:" of type {"public.folder", "public.item"} with multiple selections allowed'"""  # noqa: E501
-            process = subprocess.Popen(  # noqa: S602
+            command = (
+                "osascript -e 'set theFiles to choose file with prompt "
+                '"Select files or folder:" of type {"public.folder", "public.item"} '
+                "with multiple selections allowed'"
+            )
+            process = subprocess.Popen(
                 command,
                 shell=True,
                 stdout=subprocess.PIPE,
@@ -85,18 +90,21 @@ class ImageImportScreen(Screen):
 class ImageProcessScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.input_files = []  # 初始化时的文件列表为空
+        self.input_files = []  # Empty file list during initialization
         self.cropped_images = {}
         self.file_rows = []
         self.layout = BoxLayout(orientation="vertical", padding=10, spacing=10)
-        self.current_image_path = None  # 用于保存当前正在处理的图像路径
+        self.current_image_path = (
+            None  # Used to save the path of the currently processed image
+        )
         self.add_widget(self.layout)
 
     def set_input_files(self, input_files):
-        # 设置 input_files 并重建 UI
+        # Set input_files and rebuild the UI
         self.input_files = input_files
         self._build_ui()
-        self._update_start_button_state()  # 每次重建UI后更新按钮状态
+        # Update the button state after rebuilding the UI
+        self._update_start_button_state()
 
     def update_cropped_image(self, image_data):
         core_image = CoreImage(image_data, ext="png")
@@ -111,21 +119,21 @@ class ImageProcessScreen(Screen):
     def _build_ui(self):
         self.layout.clear_widgets()
 
-        # 添加 Back 和 Start 按钮行
+        # Add Back and Start button row
         button_layout = BoxLayout(size_hint_y=None, height="40dp")
         button_layout.add_widget(self._build_back_button())
         button_layout.add_widget(Label())  # Add space
         button_layout.add_widget(self._build_start_button())
         self.layout.add_widget(button_layout)
 
-        # 添加 Save to 和路径选择行
+        # Add Save to and path selection row
         self.layout.add_widget(self._build_output_dir())
 
-        # 添加 Files 和文件行
+        # Add Files and file rows
         self.layout.add_widget(self._build_image_rows())
 
     def _build_back_button(self):
-        # Back 按钮
+        # Back button
         back_button = Button(
             text="Back",
             size_hint_x=None,
@@ -136,7 +144,7 @@ class ImageProcessScreen(Screen):
         return back_button
 
     def _build_start_button(self):
-        # Start 按钮
+        # Start button
         self.start_button = Button(
             text="Start",
             size_hint_x=None,
@@ -148,7 +156,7 @@ class ImageProcessScreen(Screen):
         return self.start_button
 
     def _build_output_dir(self):
-        # Save to 字符串和下面一行的 TextInput 和选择目录按钮
+        # Save to string and the TextInput and browse button in the row below it
         output_dir_layout = BoxLayout(
             orientation="vertical",
             size_hint_y=None,
@@ -163,14 +171,16 @@ class ImageProcessScreen(Screen):
             halign="left",
             valign="middle",
         )
-        save_to_label.bind(size=save_to_label.setter("text_size"))  # 使文本对齐有效
+        save_to_label.bind(
+            size=save_to_label.setter("text_size")
+        )  # Enable text alignment
         output_dir_layout.add_widget(save_to_label)
 
         save_layout = BoxLayout(size_hint_y=None, height="40dp")
         self.save_path_input = TextInput(hint_text="Choose a directory", readonly=True)
         self.save_path_input.bind(
             text=self._update_start_button_state,
-        )  # 绑定到文本变化事件
+        )  # Bind to text change event
         choose_button = Button(text="Browse", size_hint_x=None, width="80dp")
         choose_button.bind(on_press=self._open_file_browser)
         save_layout.add_widget(self.save_path_input)
@@ -192,9 +202,9 @@ class ImageProcessScreen(Screen):
             allow_stretch=True,
             keep_ratio=True,
         )
-        img.bind(on_touch_down=self._on_image_click)  # 绑定点击事件
-        img.file_path = file  # 将文件路径存储在 img 对象中
-        filename = os.path.splitext(os.path.basename(file))[0]  # noqa: PTH122, PTH119
+        img.bind(on_touch_down=self._on_image_click)  # Bind click event
+        img.file_path = file  # Store the file path in the img object
+        filename = os.path.splitext(os.path.basename(file))[0]
         text_input = TextInput(
             text=filename,
             multiline=False,
@@ -209,12 +219,14 @@ class ImageProcessScreen(Screen):
     def _on_image_click(self, instance, touch):
         if instance.collide_point(*touch.pos):
             image_path = instance.file_path
-            self.current_image_path = image_path  # 保存当前正在处理的图像路径
+            self.current_image_path = (
+                image_path  # Save the path of the currently processed image
+            )
             self.manager.get_screen("image_crop_screen").display_image(image_path)
             self.manager.current = "image_crop_screen"
 
     def _build_image_rows(self):
-        # Files 字符串和下面的文件行
+        # Files string and the file rows below it
         image_rows_layout = BoxLayout(orientation="vertical", padding=(48, 0, 0, 0))
 
         files_label = Label(
@@ -224,7 +236,7 @@ class ImageProcessScreen(Screen):
             halign="left",
             valign="middle",
         )
-        files_label.bind(size=files_label.setter("text_size"))  # 使文本对齐有效
+        files_label.bind(size=files_label.setter("text_size"))  # Enable text alignment
         image_rows_layout.add_widget(files_label)
 
         files_grid_layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
@@ -238,7 +250,7 @@ class ImageProcessScreen(Screen):
         scroll_view = ScrollView(
             size_hint=(1, None),
             height="400dp",
-        )  # 限制 ScrollView 的高度
+        )  # Limit the height of the ScrollView
         scroll_view.add_widget(files_grid_layout)
 
         image_rows_layout.add_widget(scroll_view)
@@ -249,10 +261,12 @@ class ImageProcessScreen(Screen):
         self.manager.current = "image_import_screen"
 
     def _open_file_browser(self, instance):
-        command = """
-        osascript -e 'set theFolder to choose folder with prompt "Select Save Directory"' -e 'POSIX path of theFolder'
-        """  # noqa: E501
-        process = subprocess.Popen(  # noqa: S602
+        command = (
+            "osascript -e 'set theFolder to choose folder "
+            'with prompt "Select Save Directory"\' '
+            "-e 'POSIX path of theFolder'"
+        )
+        process = subprocess.Popen(
             command,
             shell=True,
             stdout=subprocess.PIPE,
@@ -267,19 +281,20 @@ class ImageProcessScreen(Screen):
             # raise error
             pass
 
-        self._update_start_button_state()  # 更新 Start 按钮状态
+        self._update_start_button_state()  # Update Start button state
 
     def _update_start_button_state(self, *args):
-        # 检查 save_path_input 是否为空
+        # Check if save_path_input is empty
         if self.save_path_input.text:
             self.start_button.disabled = False
+
         else:
             self.start_button.disabled = True
 
     def _start(self, instance):
         swing_image_builder = SwingImageBuilder()
         for index, input_file in enumerate(self.input_files):
-            # 获取对应的文本框对象
+            # Get the corresponding text input object
             image = swing_image_builder.build(
                 self.cropped_images.get(index, input_file),
                 self.file_rows[index].children[0].text,
@@ -292,30 +307,30 @@ class ImageProcessScreen(Screen):
         self._show_success_popup()
 
     def _show_success_popup(self):
-        # 创建弹出窗口的内容
+        # Create the content of the popup window
         layout = BoxLayout(orientation="vertical", padding=10, spacing=10)
 
-        # 创建标签显示成功消息
+        # Create a label to display the success message
         message_label = Label(text="Images built successfully!")
         layout.add_widget(message_label)
 
-        # 创建 OK 按钮
+        # Create the OK button
         ok_button = Button(text="OK", size_hint_y=None, height="40dp")
         layout.add_widget(ok_button)
 
-        # 创建弹出窗口
+        # Create the popup window
         popup = Popup(title="Success", content=layout, size_hint=(0.5, 0.3))
 
-        # 绑定 OK 按钮的事件
+        # Bind the OK button event
         ok_button.bind(on_press=lambda instance: self._on_success_ok(popup))
 
-        # 显示弹出窗口
+        # Show the popup window
         popup.open()
 
     def _on_success_ok(self, popup):
-        # 关闭弹出窗口
+        # Close the popup window
         popup.dismiss()
-        # 返回到 image_import_screen
+        # Return to image_import_screen
         self.manager.current = "image_import_screen"
 
 
@@ -324,7 +339,7 @@ class CropBox(Widget):
         super().__init__(**kwargs)
         self.size_hint = (None, None)
         self.size = (0, 0)
-        self.dragging = False  # 用于标记是否在拖拽中
+        self.dragging = False  # Used to mark whether it is being dragged
         self.drag_offset_x = 0
         self.drag_offset_y = 0
 
@@ -353,7 +368,7 @@ class CropBox(Widget):
             if parent:
                 image_widget = parent.image_widget
 
-                # 获取图片的实际显示区域
+                # Get the actual display area of the image
                 display_x, display_y, display_width, display_height = (
                     get_image_display_area(image_widget)
                 )
@@ -389,54 +404,56 @@ class ImageCropScreen(Screen):
         self.layout = FloatLayout()
         self.add_widget(self.layout)
 
-        # 添加按钮行
+        # Add the button row
         button_layout = BoxLayout(size_hint_y=None, height="40dp", pos_hint={"top": 1})
         button_layout.add_widget(self._build_back_button())
         button_layout.add_widget(Label())  # Add space
         button_layout.add_widget(self._build_done_button())
         self.layout.add_widget(button_layout)
 
-        # 添加 Image Widget 用于显示图片
+        # Add Image Widget to display the image
         self.image_widget = Image(size_hint=(1, 1), allow_stretch=True, keep_ratio=True)
         self.layout.add_widget(self.image_widget)
 
-        # 将 image_widget 设置为 layout 的属性, 以便在 CropBox 中访问
+        # Set image_widget as a property of layout to access it in CropBox
         self.layout.image_widget = self.image_widget
 
-        # 添加裁剪框 (确保添加顺序是在 Image 之后)
+        # Add the cropping box (make sure it is added after Image)
         self.crop_box = CropBox()
         self.layout.add_widget(self.crop_box)
 
-        self.original_image = None  # 保存原始图片的 Pillow 对象
+        self.original_image = None  # Save the original image as a Pillow object
 
     def display_image(self, image_path):
-        # 设置图片的路径
+        # Set the path of the image
         self.image_widget.source = image_path
 
-        # 加载图片为 Pillow Image 以便裁剪时使用
+        # Load the image as a Pillow Image for cropping
         self.original_image = PILImage.open(image_path)
 
-        # 使用 Clock.schedule_once 确保图片和布局完全加载后再更新裁剪框
+        # Use Clock.schedule_once to ensure the image and layout
+        # are fully loaded before updating the crop box
         Clock.schedule_once(self._check_texture_loaded, 0.1)
 
     def _check_texture_loaded(self, *args):
         if self.image_widget.texture:
             self._update_crop_box()
         else:
-            # 如果纹理尚未加载, 稍后再次检查
+            # If the texture is not yet loaded, check again later
             Clock.schedule_once(self._check_texture_loaded, 0.1)
 
     def _on_image_loaded(self, instance, *args):
-        # 确保在图片加载完成后执行布局更新, 立即调用更新方法
+        # Ensure that layout updates are performed after the image is fully loaded,
+        # call update method immediately
         if instance.texture:
             self._update_crop_box()
 
     def _update_crop_box(self, *args):
-        # 当图片加载完成后, 设置裁剪框的尺寸和位置
+        # When the image is fully loaded, set the size and position of the crop box
         image_width, image_height = self.image_widget.texture_size
         widget_width, widget_height = self.image_widget.size
 
-        # 确定图片在widget中的缩放比例和位置
+        # Determine the scaling ratio and position of the image within the widget
         scale_x = widget_width / image_width
         scale_y = widget_height / image_height
         scale = min(scale_x, scale_y)
@@ -445,7 +462,7 @@ class ImageCropScreen(Screen):
 
         short_side = min(display_width, display_height)
 
-        # 设置裁剪框的大小和位置
+        # Set the size and position of the crop box
         self.crop_box.size = (short_side, short_side)
         self.crop_box.pos = (
             (self.image_widget.center_x - short_side / 2),
@@ -453,7 +470,7 @@ class ImageCropScreen(Screen):
         )
 
         self.crop_box.update_position()
-        self.layout.do_layout()  # 强制布局更新
+        self.layout.do_layout()  # Force layout update
 
     def _build_back_button(self):
         back_button = Button(
@@ -482,36 +499,37 @@ class ImageCropScreen(Screen):
         if self.original_image is None:
             return
 
-        # 获取裁剪框在图片上的相对位置
+        # Get the relative position of the crop box on the image
         display_x, display_y, display_width, display_height = get_image_display_area(
             self.image_widget,
         )
 
-        # 确保在获取位置和尺寸时使用最新的裁剪框坐标
+        # Ensure the latest crop box coordinates are used
+        # when getting the position and size
         crop_x = (
             (self.crop_box.x - display_x) / display_width * self.original_image.width
         )
         crop_y = (
             (self.crop_box.y - display_y) / display_height * self.original_image.height
-        )  # 注意使用裁剪框的 top 属性
+        )  # Note that the top attribute of the crop box is used
         crop_width = self.crop_box.width / display_width * self.original_image.width
         crop_height = self.crop_box.height / display_height * self.original_image.height
 
-        # 将坐标转换为整数以便裁剪
+        # Convert coordinates to integers for cropping
         crop_x = int(crop_x)
         crop_y = int(
             self.original_image.height - crop_y,
-        )  # 修正 crop_y 坐标 原点从图片底部开始
+        )  # Adjust crop_y coordinate; origin is at the bottom of the image
         crop_width = int(crop_width)
         crop_height = int(crop_height)
 
-        # 确保裁剪区域在图片范围内
+        # Ensure the cropping area is within the image boundaries
         crop_x = max(0, crop_x)
         crop_y = max(0, crop_y - crop_height)
         crop_width = min(self.original_image.width - crop_x, crop_width)
         crop_height = min(self.original_image.height - crop_y, crop_height)
 
-        # 进行裁剪
+        # Perform the crop
         cropped_image = self.original_image.crop(
             (
                 crop_x,
@@ -521,15 +539,15 @@ class ImageCropScreen(Screen):
             ),
         )
 
-        # 将裁剪后的图像保存到内存中
+        # Save the cropped image to memory
         image_data = BytesIO()
         cropped_image.save(image_data, format="PNG")
-        image_data.seek(0)  # 回到缓冲区的开始
+        image_data.seek(0)  # Go back to the start of the buffer
 
-        # 更新 `ImageProcessScreen` 的图像行
+        # Update the image row in `ImageProcessScreen`
         self.manager.get_screen("image_process_screen").update_cropped_image(image_data)
 
-        # 返回到 `ImageProcessScreen`
+        # Return to `ImageProcessScreen`
         self._go_back(None)
 
     def _go_back(self, instance):
