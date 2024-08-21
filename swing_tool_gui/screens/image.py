@@ -340,8 +340,10 @@ class CropBox(Widget):
         self.size_hint = (None, None)
         self.size = (0, 0)
         self.dragging = False  # Used to mark whether it is being dragged
+        self.resizing = False  # Used to mark whether the box is being resized
         self.drag_offset_x = 0
         self.drag_offset_y = 0
+        self.start_drag_y = 0  # Store the Y position when the drag starts
 
         with self.canvas:
             Color(1, 0, 0, 1)  # Red color for the box border
@@ -356,14 +358,19 @@ class CropBox(Widget):
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
-            self.dragging = True
-            self.drag_offset_x = touch.x - self.x
-            self.drag_offset_y = touch.y - self.y
-            return True
+            if touch.button == "left":
+                self.dragging = True
+                self.drag_offset_x = touch.x - self.x
+                self.drag_offset_y = touch.y - self.y
+                return True
+            elif touch.button == "right":
+                self.resizing = True
+                self.start_drag_y = touch.y
+                return True
         return super().on_touch_down(touch)
 
     def on_touch_move(self, touch):
-        if self.dragging:
+        if touch.button == "left" and self.dragging:
             parent = self.parent
             if parent:
                 image_widget = parent.image_widget
@@ -389,11 +396,60 @@ class CropBox(Widget):
 
                 self.pos = (new_x, new_y)
                 return True
+        elif touch.button == "right" and self.resizing:
+            parent = self.parent
+            if parent:
+                image_widget = parent.image_widget
+
+                # Get the actual display area of the image
+                display_x, display_y, display_width, display_height = (
+                    get_image_display_area(image_widget)
+                )
+
+                # Determine the short side of the image
+                max_side = min(display_width, display_height)
+
+                # Calculate the difference in Y position
+                drag_distance = touch.y - self.start_drag_y
+
+                # Determine the scaling factor based on drag direction
+                scale_factor = 1.01 if drag_distance > 0 else 0.99
+
+                # Calculate the new size of the crop box
+                new_width = self.width * scale_factor
+                new_height = self.height * scale_factor
+
+                # Ensure the new size does not exceed the short side of the image
+                if new_width > max_side or new_height > max_side:
+                    new_width = min(new_width, max_side)
+                    new_height = min(new_height, max_side)
+
+                # Ensure the crop box does not get too small
+                min_size = 10  # Set a minimum size for the crop box
+                if new_width < min_size or new_height < min_size:
+                    new_width = max(new_width, min_size)
+                    new_height = max(new_height, min_size)
+
+                # Update the size and position of the crop box
+                self.size = (new_width, new_height)
+                self.pos = (
+                    self.center_x - new_width / 2,
+                    self.center_y - new_height / 2,
+                )
+
+                # Update the starting drag position for continuous scaling
+                self.start_drag_y = touch.y
+
+                self.update_position()
+                return True
         return super().on_touch_move(touch)
 
     def on_touch_up(self, touch):
-        if self.dragging:
+        if touch.button == "left" and self.dragging:
             self.dragging = False
+            return True
+        elif touch.button == "right" and self.resizing:
+            self.resizing = False
             return True
         return super().on_touch_up(touch)
 
