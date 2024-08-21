@@ -1,5 +1,24 @@
+import subprocess
+
 from kivy.uix.widget import Widget
 from PIL import Image
+
+
+class AppleScriptExecutor:
+    """A utility class for executing AppleScript commands."""
+
+    @staticmethod
+    def run_script(script):
+        """Runs the given AppleScript command and returns the output."""
+        process = subprocess.Popen(
+            script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        output, error = process.communicate()
+
+        if process.returncode != 0:
+            raise RuntimeError(f"AppleScript execution failed: {error.decode('utf-8')}")
+
+        return output
 
 
 def is_image_file(file_path: str):
