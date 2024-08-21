@@ -62,8 +62,12 @@ class ImageImportScreen(Screen):
             '"Select files or folder:" of type {"public.folder", "public.item"} '
             "with multiple selections allowed'"
         )
-        output = AppleScriptExecutor.run_script(script)
-        self._process_selected_files(output)
+        try:
+            output = AppleScriptExecutor.run_script(script)
+        except RuntimeError:
+            pass
+        else:
+            self._process_selected_files(output)
 
     def _process_selected_files(self, output):
         """Processes selected files and folders."""
