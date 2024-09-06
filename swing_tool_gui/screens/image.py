@@ -254,9 +254,18 @@ class ImageProcessScreen(Screen):
                 self.cropped_images.get(index, input_file),
                 self.file_rows[index].children[0].text,
             )
+            image_ig = swing_image_builder.build(
+                self.cropped_images.get(index, input_file),
+                self.file_rows[index].children[0].text,
+                True,
+            )
             image.save(
                 Path(self.save_path_input.text.strip())
                 / f"{Path(input_file).stem}_new{Path(input_file).suffix}"
+            )
+            image_ig.save(
+                Path(self.save_path_input.text.strip())
+                / f"{Path(input_file).stem}_new_ig{Path(input_file).suffix}"
             )
         self._show_success_popup()
 

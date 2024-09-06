@@ -34,7 +34,7 @@ format:    ## Fix lint
 .PHONY: format
 
 build:    ## Build the app
-	$(POETRY_RUN) pyinstaller --name swing_tool_gui --windowed swing_tool_gui/app.py --noconfirm --strip --clean --collect-all=swing_tool
+	$(POETRY_RUN) pyinstaller --name swing_tool_gui --windowed swing_tool_gui/app.py --icon=static/logo.png --noconfirm --strip --clean --collect-all=swing_tool
 .PHONY: build
 
 release:    ## Create new tag with version in pyproject.toml
