@@ -1,4 +1,9 @@
 
+## [v1.1.1] - 2024-09-06
+### :sparkles: New Features
+- [`8a88fdc`](https://github.com/ahuang0808/swing-tool-gui/commit/8a88fdc86b064e9d4b69902a50665ef363cc41c1) - add feat for building IG size images *(commit by [@ahuang0808](https://github.com/ahuang0808))*
+
+
 ## [v1.1.0] - 2024-08-21
 ### :sparkles: New Features
 - [`fe77e26`](https://github.com/ahuang0808/swing-tool-gui/commit/fe77e26b37a30d15de4e9af6d29d386d72abb4d5) - right click and drag to resize the crop box *(commit by [@ahuang0808](https://github.com/ahuang0808))*
@@ -41,3 +46,4 @@
 [v0.1.2]: https://github.com/ahuang0808/swing-tool-gui/compare/v0.1.1...v0.1.2
 [v1.0.0]: https://github.com/ahuang0808/swing-tool-gui/compare/v0.1.3...v1.0.0
 [v1.1.0]: https://github.com/ahuang0808/swing-tool-gui/compare/v1.0.0...v1.1.0
+[v1.1.1]: https://github.com/ahuang0808/swing-tool-gui/compare/v1.1.0...v1.1.1
